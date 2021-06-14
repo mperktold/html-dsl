@@ -45,7 +45,7 @@ public class HtmlNodeTest {
 			.build();
 		assertEquals(
 			List.of(html(
-	   head(),
+	  			head(),
 				body(
 					div(Map.of("id", "main"),
 						text("some text"),
