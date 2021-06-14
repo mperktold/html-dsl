@@ -1,8 +1,3 @@
-/* BuilderTest  2021-06-13
- *
- * Copyright (c) Pro Data GmbH & ASA KG. All rights reserved.
- */
-
 package com.asaon.html;
 
 import java.util.Map;
@@ -10,12 +5,6 @@ import java.util.Map;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-/**
- * BuilderTest
- *
- * @author Matthias Perktold
- * @since 2021-06-13
- */
 public class HtmlBuilderTest {
 
 	@Test

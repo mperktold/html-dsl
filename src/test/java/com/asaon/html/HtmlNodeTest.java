@@ -1,9 +1,3 @@
-/*
- * HtmlNodeTest  2021-06-14
- *
- * Copyright (c) Pro Data GmbH & ASA KG. All rights reserved.
- */
-
 package com.asaon.html;
 
 import static com.asaon.html.Html.body;
@@ -19,12 +13,6 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
-/**
- * HtmlNodeTest
- *
- * @author Matthias Perktold
- * @since 2021-06-14
- */
 public class HtmlNodeTest {
 
 	@Test
