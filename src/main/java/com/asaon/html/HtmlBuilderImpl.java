@@ -49,11 +49,11 @@ record HtmlBuilderImpl<T>(HtmlInterpreter<T> interpreter) implements
 	@Override public HtmlBuilderImpl<T> spanEnd() { return tagEnd("span"); }
 
 	@Override public HtmlBuilderImpl<T> include(HtmlNode... nodes) {
-		for (var n : nodes) interpreter.onNode(n);
+		for (var n : nodes) include(n::addTo);
 		return this;
 	}
 	@Override public HtmlBuilderImpl<T> include(Iterable<HtmlNode> nodes) {
-		nodes.forEach(interpreter::onNode);
+		nodes.forEach(n -> include(n::addTo));
 		return this;
 	}
 	@Override public HtmlBuilderImpl<T> include(UnaryOperator<HtmlBuilderImpl<T>> subExpr) {

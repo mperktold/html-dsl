@@ -39,7 +39,7 @@ public class HtmlAppender<W extends Appendable> implements HtmlInterpreter<W> {
 			level++;
 		}
 		catch (IOException e) {
-			throw new HtmlInterpretationException(e);
+			throw new HtmlException(e);
 		}
 	}
 
@@ -50,7 +50,7 @@ public class HtmlAppender<W extends Appendable> implements HtmlInterpreter<W> {
 			writer.append(content).append('\n');
 		}
 		catch (IOException e) {
-			throw new HtmlInterpretationException(e);
+			throw new HtmlException(e);
 		}
 	}
 
@@ -62,7 +62,7 @@ public class HtmlAppender<W extends Appendable> implements HtmlInterpreter<W> {
 			writer.append("</").append(name).append('>').append('\n');
 		}
 		catch (IOException e) {
-			throw new HtmlInterpretationException(e);
+			throw new HtmlException(e);
 		}
 	}
 
@@ -71,12 +71,12 @@ public class HtmlAppender<W extends Appendable> implements HtmlInterpreter<W> {
 		return writer;
 	}
 
-	static <W extends Appendable> W appendTo(W writer, HtmlExpression expr) throws IOException {
+	public static <W extends Appendable> W appendTo(W writer, HtmlExpression expr) throws IOException {
 		try {
 			var interpreter = new HtmlAppender<>(writer);
 			return interpreter.interpret(expr);
 		}
-		catch (HtmlInterpretationException e) {
+		catch (HtmlException e) {
 			if (e.getCause() instanceof IOException)
 				throw (IOException)e.getCause();
 			throw new IOException(e);

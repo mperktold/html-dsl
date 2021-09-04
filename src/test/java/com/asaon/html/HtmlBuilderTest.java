@@ -1,7 +1,5 @@
 package com.asaon.html;
 
-import java.util.Map;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -15,7 +13,7 @@ public class HtmlBuilderTest {
 				.head()
 				.headEnd()
 				.body()
-					.div(Map.of("id", "main"))
+					.div(a -> a.id("main"))
 						.text("some text")
 						.text("more text")
 						.tag("custom-element")

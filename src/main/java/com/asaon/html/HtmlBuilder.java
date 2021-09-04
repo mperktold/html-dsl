@@ -1,21 +1,32 @@
 package com.asaon.html;
 
+import static com.asaon.html.attr.Attributes.globalAttrs;
+import static com.asaon.html.attr.Attributes.metaAttrs;
+
+import com.asaon.html.attr.AttributesBuilder;
+import com.asaon.html.attr.MetaAttributesBuilder;
+
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 
 public interface HtmlBuilder<SELF extends HtmlBuilder<SELF>> {
 	Tag<SELF, ?> tag(String tag, Map<String, String> attrs);
+	default Tag<SELF, ?> tag(String tag, Consumer<AttributesBuilder<?>> attrs) { return tag(tag, globalAttrs(attrs)); }
 	default Tag<SELF, ?> tag(String tag) { return tag(tag, Map.of()); }
 
 	Html<SELF, ?> html();
 	Head<SELF, ?> head();
 	Body<SELF, ?> body();
 	Meta<SELF, ?> meta(Map<String, String> attrs);
+	default Meta<SELF, ?> meta(Consumer<MetaAttributesBuilder<?>> attrs) { return meta(metaAttrs(attrs)); }
 	default Meta<SELF, ?> meta() { return meta(Map.of()); }
 
 	Div<SELF, ?> div(Map<String, String> attrs);
+	default Div<SELF, ?> div(Consumer<AttributesBuilder<?>> attrs) { return div(globalAttrs(attrs)); }
 	default Div<SELF, ?> div() { return div(Map.of()); }
 	Div<SELF, ?> span(Map<String, String> attrs);
+	default Div<SELF, ?> span(Consumer<AttributesBuilder<?>> attrs) { return span(globalAttrs(attrs)); }
 	default Div<SELF, ?> span() { return div(Map.of()); }
 
 	SELF include(HtmlNode... nodes);

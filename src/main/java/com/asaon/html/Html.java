@@ -5,6 +5,7 @@ import com.asaon.html.HtmlNode.Text;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.UnaryOperator;
 
 public class Html {
 
@@ -22,8 +23,8 @@ public class Html {
 		return HtmlBuilder.create(new HtmlAppender<>(new StringBuilder()).map(StringBuilder::toString));
 	}
 
-	public static String toString(HtmlExpression expr) {
-		return expr.evaluate(new HtmlAppender<>(new StringBuilder())).toString();
+	public static String toString(UnaryOperator<HtmlBuilder.Root<String, ?>> expr) {
+		return expr.apply(stringBuilder()).build();
 	}
 
 	public static String toString(HtmlNode node) {

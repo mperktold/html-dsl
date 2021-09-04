@@ -1,7 +1,5 @@
 package com.asaon.html;
 
-import java.io.IOException;
-import java.io.Writer;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +14,21 @@ public sealed interface HtmlNode {
 		}
 	}
 
+	default <B extends HtmlBuilder<?>> B addTo(B builder) {
+		if (this instanceof Text t)
+			builder.text(t.content());
+		else if (this instanceof Element e) {
+			var inner = builder.tag(e.tag(), e.attrs());
+			e.content().forEach(c -> c.addTo(builder));
+			inner.tagEnd(e.tag());
+		}
+		return builder;
+	}
+
+	default HtmlExpression asExpression() {
+		return this::addTo;
+	}
+
 	static HtmlBuilder.Root<List<HtmlNode>, ?> builder() {
 		return HtmlBuilder.create(new HtmlNodeInterpreter());
 	}
@@ -25,12 +38,6 @@ public sealed interface HtmlNode {
 	}
 
 	default void appendTo(Appendable writer) {
-		var htmlWriter = new HtmlAppender<>(writer);
-		htmlWriter.onNode(this);
-	}
-
-	default void writeTo(Writer writer) throws IOException {
-		appendTo(writer);
-		writer.flush();
+		addTo(HtmlBuilder.create(new HtmlAppender<Appendable>(writer)));
 	}
 }
