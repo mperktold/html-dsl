@@ -26,9 +26,9 @@ public interface HtmlBuilder<SELF extends HtmlBuilder<SELF>> {
 	Div<SELF, ?> div(Map<String, String> attrs);
 	default Div<SELF, ?> div(Consumer<AttributesBuilder<?>> attrs) { return div(globalAttrs(attrs)); }
 	default Div<SELF, ?> div() { return div(Map.of()); }
-	Div<SELF, ?> span(Map<String, String> attrs);
-	default Div<SELF, ?> span(Consumer<AttributesBuilder<?>> attrs) { return span(globalAttrs(attrs)); }
-	default Div<SELF, ?> span() { return div(Map.of()); }
+	Span<SELF, ?> span(Map<String, String> attrs);
+	default Span<SELF, ?> span(Consumer<AttributesBuilder<?>> attrs) { return span(globalAttrs(attrs)); }
+	default Span<SELF, ?> span() { return span(Map.of()); }
 
 	default SELF include(HtmlNode... nodes) {
 		return include(Arrays.asList(nodes));
@@ -53,19 +53,19 @@ public interface HtmlBuilder<SELF extends HtmlBuilder<SELF>> {
 	interface Meta<PARENT, SELF extends Meta<PARENT, SELF>> extends HtmlBuilder<SELF> { PARENT metaEnd(); }
 	interface Div<PARENT, SELF extends Div<PARENT, SELF>> extends HtmlBuilder<SELF> { PARENT divEnd(); }
 	interface Span<PARENT, SELF extends Span<PARENT, SELF>> extends HtmlBuilder<SELF> { PARENT spanEnd(); }
-	interface Root<T, SELF extends Root<T, SELF>> extends HtmlBuilder<SELF> { T build(); }
+	interface Root<T> extends HtmlBuilder<Root<T>> { T build(); }
 
-	static <T> Root<T, ?> create(HtmlInterpreter<T> interpreter) {
-		return new HtmlBuilderImpl<>(interpreter);
+	static <T> Root<T> root(HtmlInterpreter<T> interpreter) {
+		return new HtmlBuilderImpl.RootImpl<>(interpreter);
 	}
 
-	static <T> T interpret(HtmlInterpreter<T> interpreter, Function<? super Root<T, ?>, ? extends Root<T, ?>> expr) {
-		Root<T, ?> root = create(interpreter);
+	static <T> T interpret(HtmlInterpreter<T> interpreter, Function<? super Root<T>, ? extends Root<T>> expr) {
+		Root<T> root = root(interpreter);
 		return expr.apply(root).build();
 	}
 
-	static Root<String, ?> forString() {
-		return create(new HtmlAppender<>(new StringBuilder()).map(StringBuilder::toString));
+	static Root<String> forString() {
+		return root(new HtmlAppender<>(new StringBuilder()).map(StringBuilder::toString));
 	}
 
 	@FunctionalInterface

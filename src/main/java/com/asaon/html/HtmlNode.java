@@ -29,7 +29,7 @@ public sealed interface HtmlNode {
 		return this::addTo;
 	}
 
-	static HtmlBuilder.Root<List<HtmlNode>, ?> builder() {
+	static HtmlBuilder.Root<List<HtmlNode>> builder() {
 		return Html.builder(interpreter());
 	}
 
@@ -38,6 +38,6 @@ public sealed interface HtmlNode {
 	}
 
 	default void appendTo(Appendable writer) {
-		addTo(HtmlBuilder.create(new HtmlAppender<Appendable>(writer)));
+		addTo(HtmlBuilder.root(new HtmlAppender<>(writer)));
 	}
 }

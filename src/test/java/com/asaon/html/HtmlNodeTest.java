@@ -1,10 +1,5 @@
 package com.asaon.html;
 
-import static com.asaon.html.HtmlNodes.body;
-import static com.asaon.html.HtmlNodes.div;
-import static com.asaon.html.HtmlNodes.head;
-import static com.asaon.html.HtmlNodes.html;
-import static com.asaon.html.HtmlNodes.tag;
 import static com.asaon.html.HtmlNodes.text;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

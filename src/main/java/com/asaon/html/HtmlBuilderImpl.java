@@ -2,50 +2,94 @@ package com.asaon.html;
 
 import java.util.Map;
 
-record HtmlBuilderImpl<T>(HtmlInterpreter<T> interpreter) implements
-	HtmlBuilder.Root<T, HtmlBuilderImpl<T>>,
-	HtmlBuilder.Html<HtmlBuilderImpl<T>, HtmlBuilderImpl<T>>,
-	HtmlBuilder.Head<HtmlBuilderImpl<T>, HtmlBuilderImpl<T>>,
-	HtmlBuilder.Meta<HtmlBuilderImpl<T>, HtmlBuilderImpl<T>>,
-	HtmlBuilder.Body<HtmlBuilderImpl<T>, HtmlBuilderImpl<T>>,
-	HtmlBuilder.Div<HtmlBuilderImpl<T>, HtmlBuilderImpl<T>>,
-	HtmlBuilder.Span<HtmlBuilderImpl<T>, HtmlBuilderImpl<T>>,
-	HtmlBuilder.Tag<HtmlBuilderImpl<T>, HtmlBuilderImpl<T>>
-{
+sealed abstract class HtmlBuilderImpl<T, SELF extends HtmlBuilder<SELF>> implements HtmlBuilder<SELF> {
 
-	@Override public HtmlBuilderImpl<T> tag(String tag, Map<String, String> attrs) {
-		interpreter.onTagStart(tag, attrs, false);
-		return this;
+	final HtmlInterpreter<T> interpreter;
+	NestedImpl<T, SELF> nested;
+
+	HtmlBuilderImpl(HtmlInterpreter<T> interpreter) {
+		this.interpreter = interpreter;
 	}
-	@Override public HtmlBuilderImpl<T> tag(String tag) { return tag(tag, Map.of()); }
-	@Override public HtmlBuilderImpl<T> tagEnd(String name) {
-		interpreter.onTagEnd(name);
-		return this;
+
+	@SuppressWarnings("unchecked")
+	private SELF self() { return (SELF)this; }
+
+	private NestedImpl<T, SELF> nested() {
+		var nested = this.nested;
+		return nested != null ? nested : (this.nested = new NestedImpl<>(interpreter, self()));
 	}
 
 	@Override
-	public HtmlBuilderImpl<T> text(String content) {
-		interpreter.onContent(content);
-		return this;
+	public NestedImpl<T, SELF> tag(String tag, Map<String, String> attrs) {
+		interpreter.onTagStart(tag, attrs, false);
+		return nested();
+	}
+	@Override
+	public NestedImpl<T, SELF> tag(String tag) {
+		return tag(tag, Map.of());
 	}
 
-	@Override public HtmlBuilderImpl<T> html() { return tag("html"); }
-	@Override public HtmlBuilderImpl<T> htmlEnd() { return tagEnd("html"); }
+	@Override
+	public SELF text(String content) {
+		interpreter.onContent(content);
+		return self();
+	}
 
-	@Override public HtmlBuilderImpl<T> head() { return tag("head"); }
-	@Override public HtmlBuilderImpl<T> headEnd() { return tagEnd("head"); }
+	@Override
+	public NestedImpl<T, SELF> html() { return tag("html"); }
 
-	@Override public HtmlBuilderImpl<T> meta(Map<String, String> attrs) { return tag("meta"); }
-	@Override public HtmlBuilderImpl<T> metaEnd() { return tagEnd("meta"); }
+	@Override
+	public NestedImpl<T, SELF> head() { return tag("head"); }
 
-	@Override public HtmlBuilderImpl<T> body() { return tag("body"); }
-	@Override public HtmlBuilderImpl<T> bodyEnd() { return tagEnd("body"); }
+	@Override
+	public NestedImpl<T, SELF> meta(Map<String, String> attrs) { return tag("meta", attrs); }
 
-	@Override public HtmlBuilderImpl<T> div(Map<String, String> attrs) { return tag("div", attrs); }
-	@Override public HtmlBuilderImpl<T> divEnd() { return tagEnd("div"); }
+	@Override
+	public NestedImpl<T, SELF> body() { return tag("body"); }
 
-	@Override public HtmlBuilderImpl<T> span(Map<String, String> attrs) { return tag("span", attrs); }
-	@Override public HtmlBuilderImpl<T> spanEnd() { return tagEnd("span"); }
+	@Override
+	public NestedImpl<T, SELF> div(Map<String, String> attrs) { return tag("div", attrs); }
 
-	@Override public T build() { return interpreter.onSuccess(); }
+	@Override
+	public NestedImpl<T, SELF> span(Map<String, String> attrs) { return tag("span", attrs); }
+
+	final static class RootImpl<T> extends HtmlBuilderImpl<T, Root<T>> implements HtmlBuilder.Root<T> {
+
+		RootImpl(HtmlInterpreter<T> interpreter) {
+			super(interpreter);
+		}
+
+		@Override
+		public T build() { return interpreter.onSuccess(); }
+	}
+
+	final static class NestedImpl<T, PARENT extends HtmlBuilder<?>>
+		extends HtmlBuilderImpl<T, NestedImpl<T, PARENT>>
+		implements
+			HtmlBuilder.Tag<PARENT, NestedImpl<T, PARENT>>,
+			HtmlBuilder.Html<PARENT, NestedImpl<T, PARENT>>,
+			HtmlBuilder.Head<PARENT, NestedImpl<T, PARENT>>,
+			HtmlBuilder.Meta<PARENT, NestedImpl<T, PARENT>>,
+			HtmlBuilder.Body<PARENT, NestedImpl<T, PARENT>>,
+			HtmlBuilder.Div<PARENT, NestedImpl<T, PARENT>>,
+			HtmlBuilder.Span<PARENT, NestedImpl<T, PARENT>>
+	{
+		final PARENT parent;
+
+		NestedImpl(HtmlInterpreter<T> interpreter, PARENT parent) {
+			super(interpreter);
+			this.parent = parent;
+		}
+
+		@Override public PARENT tagEnd(String name) {
+			interpreter.onTagEnd(name);
+			return parent;
+		}
+		@Override public PARENT htmlEnd() { return tagEnd("html"); }
+		@Override public PARENT headEnd() { return tagEnd("head"); }
+		@Override public PARENT metaEnd() { return tagEnd("meta"); }
+		@Override public PARENT bodyEnd() { return tagEnd("body"); }
+		@Override public PARENT divEnd() { return tagEnd("div"); }
+		@Override public PARENT spanEnd() { return tagEnd("span"); }
+	}
 }

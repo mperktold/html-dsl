@@ -8,7 +8,7 @@ public class HtmlBuilderTest {
 	@Test
 	void testAppendToStringBuilder() {
 		var sb = new StringBuilder();
-		HtmlBuilder.create(new HtmlAppender<>(sb))
+		HtmlBuilder.root(new HtmlAppender<>(sb))
 			.html()
 				.head()
 				.headEnd()
@@ -157,8 +157,8 @@ public class HtmlBuilderTest {
 				</custom-element>
 			</div>
 			""",
-			"Doesn't compile because of Root's SELF type param"
-			//Html.toString(builder -> subExpression(builder))
+//			"Doesn't compile because of Root's SELF type param"
+			Html.toString(this::subExpression)
 		);
 	}
 }
