@@ -7,7 +7,7 @@ public sealed interface HtmlNode {
 
 	record Text(String content) implements HtmlNode {}
 
-	record Element(String tag, Map<String, String> attrs, List<HtmlNode> content) implements HtmlNode {
+	record Element(String tag, Map<String, String> attrs, List<? extends HtmlNode> content) implements HtmlNode {
 		public Element {
 			attrs = Map.copyOf(attrs);
 			content = List.copyOf(content);
@@ -25,12 +25,12 @@ public sealed interface HtmlNode {
 		return builder;
 	}
 
-	default HtmlExpression asExpression() {
+	default HtmlBuilder.SubExpression asExpression() {
 		return this::addTo;
 	}
 
 	static HtmlBuilder.Root<List<HtmlNode>, ?> builder() {
-		return HtmlBuilder.create(new HtmlNodeInterpreter());
+		return Html.builder(interpreter());
 	}
 
 	static HtmlInterpreter<List<HtmlNode>> interpreter() {

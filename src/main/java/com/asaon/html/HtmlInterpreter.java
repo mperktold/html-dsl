@@ -10,10 +10,6 @@ public interface HtmlInterpreter<T> {
 
 	T onSuccess();
 
-	default T interpret(HtmlExpression expr) {
-		return expr.evaluate(this);
-	}
-
 	default <U> HtmlInterpreter<U> map(Function<T, U> fn) {
 		return new HtmlInterpreterWrapper<>(this) {
 			@Override
@@ -21,9 +17,5 @@ public interface HtmlInterpreter<T> {
 				return fn.apply(wrapped.onSuccess());
 			}
 		};
-	}
-
-	static HtmlInterpreter<String> asString() {
-		return new HtmlAppender<>(new StringBuilder()).map(StringBuilder::toString);
 	}
 }

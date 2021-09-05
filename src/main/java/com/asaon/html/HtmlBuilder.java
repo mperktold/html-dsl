@@ -6,9 +6,10 @@ import static com.asaon.html.attr.Attributes.metaAttrs;
 import com.asaon.html.attr.AttributesBuilder;
 import com.asaon.html.attr.MetaAttributesBuilder;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.function.Consumer;
-import java.util.function.UnaryOperator;
+import java.util.function.Function;
 
 public interface HtmlBuilder<SELF extends HtmlBuilder<SELF>> {
 	Tag<SELF, ?> tag(String tag, Map<String, String> attrs);
@@ -29,9 +30,19 @@ public interface HtmlBuilder<SELF extends HtmlBuilder<SELF>> {
 	default Div<SELF, ?> span(Consumer<AttributesBuilder<?>> attrs) { return span(globalAttrs(attrs)); }
 	default Div<SELF, ?> span() { return div(Map.of()); }
 
-	SELF include(HtmlNode... nodes);
-	SELF include(Iterable<HtmlNode> nodes);
-	SELF include(UnaryOperator<SELF> subExpr);
+	default SELF include(HtmlNode... nodes) {
+		return include(Arrays.asList(nodes));
+	}
+	default SELF include(Iterable<HtmlNode> nodes) {
+		@SuppressWarnings("unchecked") SELF self = (SELF)this;
+		for (HtmlNode n : nodes) n.addTo(self);
+		return self;
+	}
+
+	default SELF include(SubExpression subExpr) {
+		@SuppressWarnings("unchecked") SELF self = (SELF)this;
+		return subExpr.form(self);
+	}
 
 	SELF text(String content);
 
@@ -42,14 +53,23 @@ public interface HtmlBuilder<SELF extends HtmlBuilder<SELF>> {
 	interface Meta<PARENT, SELF extends Meta<PARENT, SELF>> extends HtmlBuilder<SELF> { PARENT metaEnd(); }
 	interface Div<PARENT, SELF extends Div<PARENT, SELF>> extends HtmlBuilder<SELF> { PARENT divEnd(); }
 	interface Span<PARENT, SELF extends Span<PARENT, SELF>> extends HtmlBuilder<SELF> { PARENT spanEnd(); }
-
 	interface Root<T, SELF extends Root<T, SELF>> extends HtmlBuilder<SELF> { T build(); }
 
 	static <T> Root<T, ?> create(HtmlInterpreter<T> interpreter) {
 		return new HtmlBuilderImpl<>(interpreter);
 	}
 
+	static <T> T interpret(HtmlInterpreter<T> interpreter, Function<? super Root<T, ?>, ? extends Root<T, ?>> expr) {
+		Root<T, ?> root = create(interpreter);
+		return expr.apply(root).build();
+	}
+
 	static Root<String, ?> forString() {
 		return create(new HtmlAppender<>(new StringBuilder()).map(StringBuilder::toString));
+	}
+
+	@FunctionalInterface
+	interface SubExpression {
+		<B extends HtmlBuilder<B>> B form(B builder);
 	}
 }

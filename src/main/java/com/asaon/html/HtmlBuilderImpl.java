@@ -1,7 +1,6 @@
 package com.asaon.html;
 
 import java.util.Map;
-import java.util.function.UnaryOperator;
 
 record HtmlBuilderImpl<T>(HtmlInterpreter<T> interpreter) implements
 	HtmlBuilder.Root<T, HtmlBuilderImpl<T>>,
@@ -47,18 +46,6 @@ record HtmlBuilderImpl<T>(HtmlInterpreter<T> interpreter) implements
 
 	@Override public HtmlBuilderImpl<T> span(Map<String, String> attrs) { return tag("span", attrs); }
 	@Override public HtmlBuilderImpl<T> spanEnd() { return tagEnd("span"); }
-
-	@Override public HtmlBuilderImpl<T> include(HtmlNode... nodes) {
-		for (var n : nodes) include(n::addTo);
-		return this;
-	}
-	@Override public HtmlBuilderImpl<T> include(Iterable<HtmlNode> nodes) {
-		nodes.forEach(n -> include(n::addTo));
-		return this;
-	}
-	@Override public HtmlBuilderImpl<T> include(UnaryOperator<HtmlBuilderImpl<T>> subExpr) {
-		return subExpr.apply(this);
-	}
 
 	@Override public T build() { return interpreter.onSuccess(); }
 }

@@ -1,11 +1,11 @@
 package com.asaon.html;
 
-import static com.asaon.html.Html.body;
-import static com.asaon.html.Html.div;
-import static com.asaon.html.Html.head;
-import static com.asaon.html.Html.html;
-import static com.asaon.html.Html.tag;
-import static com.asaon.html.Html.text;
+import static com.asaon.html.HtmlNodes.body;
+import static com.asaon.html.HtmlNodes.div;
+import static com.asaon.html.HtmlNodes.head;
+import static com.asaon.html.HtmlNodes.html;
+import static com.asaon.html.HtmlNodes.tag;
+import static com.asaon.html.HtmlNodes.text;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
@@ -32,13 +32,13 @@ public class HtmlNodeTest {
 				.htmlEnd()
 			.build();
 		assertEquals(
-			List.of(html(
-	  			head(),
-				body(
-					div(Map.of("id", "main"),
-						text("some text"),
-						text("more text"),
-						tag("custom-element")
+			List.of(HtmlNodes.html(
+				HtmlNodes.head(),
+				HtmlNodes.body(
+					HtmlNodes.div(Map.of("id", "main"),
+						HtmlNodes.text("some text"),
+						HtmlNodes.text("more text"),
+						HtmlNodes.tag("custom-element")
 					)
 				)
 			)),
@@ -63,13 +63,13 @@ public class HtmlNodeTest {
 			</html>
 			""",
 			Html.toString(
-				html(
-					head(),
-					body(
-						div(Map.of("id", "main"),
+				HtmlNodes.html(
+					HtmlNodes.head(),
+					HtmlNodes.body(
+						HtmlNodes.div(Map.of("id", "main"),
 							text("some text"),
 							text("more text"),
-							tag("custom-element")
+							HtmlNodes.tag("custom-element")
 						)
 					)
 				)

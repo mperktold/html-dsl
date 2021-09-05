@@ -70,16 +70,4 @@ public class HtmlAppender<W extends Appendable> implements HtmlInterpreter<W> {
 	public W onSuccess() {
 		return writer;
 	}
-
-	public static <W extends Appendable> W appendTo(W writer, HtmlExpression expr) throws IOException {
-		try {
-			var interpreter = new HtmlAppender<>(writer);
-			return interpreter.interpret(expr);
-		}
-		catch (HtmlException e) {
-			if (e.getCause() instanceof IOException)
-				throw (IOException)e.getCause();
-			throw new IOException(e);
-		}
-	}
 }
