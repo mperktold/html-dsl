@@ -44,4 +44,10 @@ public sealed interface HtmlNode {
 	default void appendTo(Appendable writer) {
 		addTo(HtmlBuilder.root(new HtmlAppender<>(writer)));
 	}
+
+	static String toString(HtmlNode node) {
+		var sb = new StringBuilder();
+		node.appendTo(sb);
+		return sb.toString();
+	}
 }
