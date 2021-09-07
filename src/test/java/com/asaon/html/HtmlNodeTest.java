@@ -62,7 +62,7 @@ public class HtmlNodeTest {
 				</body>
 			</html>
 			""",
-			Html.toString(
+			HtmlNode.toString(
 				html(
 					head(),
 					body(

@@ -70,7 +70,7 @@ public class NodeBuilderInteractionTest {
 				</body>
 			</html>
 			""",
-			Html.toString(html)
+			HtmlNode.toString(html)
 		);
 	}
 

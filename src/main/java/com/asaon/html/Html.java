@@ -25,10 +25,4 @@ public class Html {
 	public static String toString(UnaryOperator<HtmlBuilder.Root<String, ?>> expr) {
 		return expr.apply(stringBuilder()).build();
 	}
-
-	public static String toString(HtmlNode node) {
-		var sb = new StringBuilder();
-		node.appendTo(sb);
-		return sb.toString();
-	}
 }
