@@ -25,10 +25,6 @@ public sealed interface HtmlNode {
 		return builder;
 	}
 
-	default HtmlBuilder.SubExpression asExpression() {
-		return this::addTo;
-	}
-
 	static HtmlBuilder.Root<List<HtmlNode>> builder() {
 		return Html.builder(interpreter());
 	}

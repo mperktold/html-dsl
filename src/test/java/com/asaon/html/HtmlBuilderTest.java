@@ -137,7 +137,7 @@ public class HtmlBuilderTest {
 		);
 	}
 
-	<B extends HtmlBuilder<B>> B subExpression(B builder) {
+	<B extends HtmlBuilder<B>> B subExpression(HtmlBuilder<B> builder) {
 		return builder
 			.div(a -> a.id("main"))
 				.text("some text")
@@ -157,7 +157,6 @@ public class HtmlBuilderTest {
 				</custom-element>
 			</div>
 			""",
-//			"Doesn't compile because of Root's SELF type param"
 			Html.toString(this::subExpression)
 		);
 	}
