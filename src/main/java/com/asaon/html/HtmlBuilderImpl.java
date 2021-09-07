@@ -77,7 +77,7 @@ sealed abstract class HtmlBuilderImpl<T, SELF extends HtmlBuilder<SELF>> impleme
 			HtmlBuilder.Div<PARENT, NestedImpl<T, PARENT>>,
 			HtmlBuilder.Span<PARENT, NestedImpl<T, PARENT>>
 	{
-		final PARENT parent;
+		private final PARENT parent;
 
 		NestedImpl(HtmlInterpreter<T> interpreter, PARENT parent) {
 			super(interpreter);
