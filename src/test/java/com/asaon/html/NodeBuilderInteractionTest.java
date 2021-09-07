@@ -53,9 +53,7 @@ public class NodeBuilderInteractionTest {
 		var html = html(
 			head(),
 			body(
-				HtmlNode.builder()
-					.include(this::subExpression)
-					.build()
+				HtmlNode.build(this::subExpression)
 			)
 		);
 		Assertions.assertEquals("""
