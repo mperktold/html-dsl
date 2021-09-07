@@ -1,11 +1,12 @@
 package com.asaon.html;
 
+import java.lang.ref.WeakReference;
 import java.util.Map;
 
 sealed abstract class HtmlBuilderImpl<T, SELF extends HtmlBuilder<SELF>> implements HtmlBuilder<SELF> {
 
 	final HtmlInterpreter<T> interpreter;
-	NestedImpl<T, SELF> nested;
+	private WeakReference<NestedImpl<T, SELF>> nestedRef;
 
 	HtmlBuilderImpl(HtmlInterpreter<T> interpreter) {
 		this.interpreter = interpreter;
@@ -15,8 +16,10 @@ sealed abstract class HtmlBuilderImpl<T, SELF extends HtmlBuilder<SELF>> impleme
 	private SELF self() { return (SELF)this; }
 
 	private NestedImpl<T, SELF> nested() {
-		var nested = this.nested;
-		return nested != null ? nested : (this.nested = new NestedImpl<>(interpreter, self()));
+		var nested = nestedRef != null ? nestedRef.get() : null;
+		if (nested == null)
+			nestedRef = new WeakReference<>(nested = new NestedImpl<>(interpreter, self()));
+		return nested;
 	}
 
 	@Override
