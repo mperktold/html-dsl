@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 public interface HtmlBuilder<SELF extends HtmlBuilder<SELF>> {
 	Tag<SELF, ?> tag(String tag, Map<String, String> attrs);
@@ -39,9 +40,9 @@ public interface HtmlBuilder<SELF extends HtmlBuilder<SELF>> {
 		return self;
 	}
 
-	default SELF include(SubExpression subExpr) {
+	default SELF include(UnaryOperator<SELF> subExpr) {
 		@SuppressWarnings("unchecked") SELF self = (SELF)this;
-		return subExpr.form(self);
+		return subExpr.apply(self);
 	}
 
 	SELF text(String content);
@@ -66,10 +67,5 @@ public interface HtmlBuilder<SELF extends HtmlBuilder<SELF>> {
 
 	static Root<String, ?> forString() {
 		return create(new HtmlAppender<>(new StringBuilder()).map(StringBuilder::toString));
-	}
-
-	@FunctionalInterface
-	interface SubExpression {
-		<B extends HtmlBuilder<B>> B form(B builder);
 	}
 }
