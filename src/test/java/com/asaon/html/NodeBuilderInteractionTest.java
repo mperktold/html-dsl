@@ -1,5 +1,12 @@
 package com.asaon.html;
 
+import static com.asaon.html.HtmlNodes.body;
+import static com.asaon.html.HtmlNodes.div;
+import static com.asaon.html.HtmlNodes.head;
+import static com.asaon.html.HtmlNodes.html;
+import static com.asaon.html.HtmlNodes.tag;
+import static com.asaon.html.HtmlNodes.text;
+
 import java.util.Map;
 
 import org.junit.jupiter.api.Assertions;
@@ -9,10 +16,10 @@ public class NodeBuilderInteractionTest {
 
 	@Test
 	void testIncludeNodes() {
-		var subNode = HtmlNodes.div(Map.of("id", "main"),
-			HtmlNodes.text("some text"),
-			HtmlNodes.text("more text"),
-			HtmlNodes.tag("custom-element")
+		var subNode = div(Map.of("id", "main"),
+			text("some text"),
+			text("more text"),
+			tag("custom-element")
 		);
 		var htmlString = Html.stringBuilder()
 			.html()
@@ -43,9 +50,9 @@ public class NodeBuilderInteractionTest {
 
 	@Test
 	void testNodesWithSubBuilder() {
-		var html = HtmlNodes.html(
-			HtmlNodes.head(),
-			HtmlNodes.body(
+		var html = html(
+			head(),
+			body(
 				HtmlNode.builder()
 					.include(this::subExpression)
 					.build()
