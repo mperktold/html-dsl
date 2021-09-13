@@ -23,7 +23,7 @@ public sealed interface HtmlNode {
 		public <B extends HtmlDsl<B>> B addTo(HtmlDsl<B> builder) {
 			var inner = builder.tag(tag, attrs);
 			content.forEach(c -> c.addTo(builder));
-			return inner.tagEnd(tag);
+			return inner._tag(tag);
 		}
 	}
 

@@ -21,7 +21,7 @@ public interface HtmlInterpreter<T> {
 	}
 
 	default T interpret(UnaryOperator<HtmlDsl.Document<T, ?>> expr) {
-		return expr.apply(document()).documentEnd();
+		return expr.apply(document())._document();
 	}
 
 	default HtmlDsl.Document<T, ?> document() {

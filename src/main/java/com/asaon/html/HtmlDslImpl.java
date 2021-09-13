@@ -18,7 +18,7 @@ record HtmlDslImpl<T>(HtmlInterpreter<T> interpreter) implements
 		return this;
 	}
 	@Override public HtmlDslImpl<T> tag(String tag) { return tag(tag, Map.of()); }
-	@Override public HtmlDslImpl<T> tagEnd(String name) {
+	@Override public HtmlDslImpl<T> _tag(String name) {
 		interpreter.onTagEnd(name);
 		return this;
 	}
@@ -30,22 +30,22 @@ record HtmlDslImpl<T>(HtmlInterpreter<T> interpreter) implements
 	}
 
 	@Override public HtmlDslImpl<T> html() { return tag("html"); }
-	@Override public HtmlDslImpl<T> htmlEnd() { return tagEnd("html"); }
+	@Override public HtmlDslImpl<T> _html() { return _tag("html"); }
 
 	@Override public HtmlDslImpl<T> head() { return tag("head"); }
-	@Override public HtmlDslImpl<T> headEnd() { return tagEnd("head"); }
+	@Override public HtmlDslImpl<T> _head() { return _tag("head"); }
 
 	@Override public HtmlDslImpl<T> meta(Map<String, String> attrs) { return tag("meta"); }
-	@Override public HtmlDslImpl<T> metaEnd() { return tagEnd("meta"); }
+	@Override public HtmlDslImpl<T> _meta() { return _tag("meta"); }
 
 	@Override public HtmlDslImpl<T> body() { return tag("body"); }
-	@Override public HtmlDslImpl<T> bodyEnd() { return tagEnd("body"); }
+	@Override public HtmlDslImpl<T> _body() { return _tag("body"); }
 
 	@Override public HtmlDslImpl<T> div(Map<String, String> attrs) { return tag("div", attrs); }
-	@Override public HtmlDslImpl<T> divEnd() { return tagEnd("div"); }
+	@Override public HtmlDslImpl<T> _div() { return _tag("div"); }
 
 	@Override public HtmlDslImpl<T> span(Map<String, String> attrs) { return tag("span", attrs); }
-	@Override public HtmlDslImpl<T> spanEnd() { return tagEnd("span"); }
+	@Override public HtmlDslImpl<T> _span() { return _tag("span"); }
 
-	@Override public T documentEnd() { return interpreter.onSuccess(); }
+	@Override public T _document() { return interpreter.onSuccess(); }
 }

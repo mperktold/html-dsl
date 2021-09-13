@@ -12,17 +12,17 @@ public class HtmlDslTest {
 			.document()
 				.html()
 					.head()
-					.headEnd()
+					._head()
 					.body()
 						.div(a -> a.id("main"))
 							.text("some text")
 							.text("more text")
 							.tag("custom-element")
-							.tagEnd("custom-element")
-						.divEnd()
-					.bodyEnd()
-				.htmlEnd()
-			.documentEnd();
+							._tag("custom-element")
+						._div()
+					._body()
+				._html()
+			._document();
 		Assertions.assertEquals("""
 			<html>
 				<head>
@@ -47,17 +47,17 @@ public class HtmlDslTest {
 			.document()
 				.html()
 					.head()
-					.headEnd()
+					._head()
 					.body()
 						.div(a -> a.id("main"))
 							.text("some text")
 							.text("more text")
 							.tag("custom-element")
-							.tagEnd("custom-element")
-						.divEnd()
-					.bodyEnd()
-				.htmlEnd()
-			.documentEnd();
+							._tag("custom-element")
+						._div()
+					._body()
+				._html()
+			._document();
 		Assertions.assertEquals("""
 			<html>
 				<head>
@@ -81,16 +81,16 @@ public class HtmlDslTest {
 		var htmlString = Html.buildString(builder -> builder
 			.html()
 				.head()
-				.headEnd()
+				._head()
 				.body()
 					.div(a -> a.id("main"))
-					.text("some text")
+						.text("some text")
 						.text("more text")
 						.tag("custom-element")
-						.tagEnd("custom-element")
-					.divEnd()
-				.bodyEnd()
-			.htmlEnd()
+						._tag("custom-element")
+					._div()
+				._body()
+			._html()
 		);
 		Assertions.assertEquals("""
 			<html>
@@ -116,12 +116,12 @@ public class HtmlDslTest {
 			.document()
 				.html()
 					.head()
-					.headEnd()
+					._head()
 					.body()
 						.include(this::subExpression)
-					.bodyEnd()
-				.htmlEnd()
-			.documentEnd();
+					._body()
+				._html()
+			._document();
 		Assertions.assertEquals("""
 			<html>
 				<head>
@@ -146,8 +146,8 @@ public class HtmlDslTest {
 				.text("some text")
 				.text("more text")
 				.tag("custom-element")
-				.tagEnd("custom-element")
-			.divEnd();
+				._tag("custom-element")
+			._div();
 	}
 
 	@Test

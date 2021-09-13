@@ -25,12 +25,12 @@ public class NodeBuilderInteractionTest {
 			.document()
 				.html()
 					.head()
-					.headEnd()
+					._head()
 					.body()
 						.include(subNode)
-					.bodyEnd()
-				.htmlEnd()
-			.documentEnd();
+					._body()
+				._html()
+			._document();
 		Assertions.assertEquals("""
 			<html>
 				<head>
@@ -81,7 +81,7 @@ public class NodeBuilderInteractionTest {
 				.text("some text")
 				.text("more text")
 				.tag("custom-element")
-				.tagEnd("custom-element")
-			.divEnd();
+				._tag("custom-element")
+			._div();
 	}
 }

@@ -21,17 +21,17 @@ public class HtmlNodeTest {
 			.document()
 				.html()
 					.head()
-					.headEnd()
+					._head()
 					.body()
 						.div(Map.of("id", "main"))
 							.text("some text")
 							.text("more text")
 							.tag("custom-element")
-							.tagEnd("custom-element")
-						.divEnd()
-					.bodyEnd()
-				.htmlEnd()
-			.documentEnd();
+							._tag("custom-element")
+						._div()
+					._body()
+				._html()
+			._document();
 		assertEquals(
 			List.of(html(
 				head(),
