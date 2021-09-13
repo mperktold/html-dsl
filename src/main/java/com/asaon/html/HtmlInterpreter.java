@@ -2,6 +2,7 @@ package com.asaon.html;
 
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 public interface HtmlInterpreter<T> {
 	void onTagStart(String name, Map<String, String> attrs, boolean empty);
@@ -17,5 +18,13 @@ public interface HtmlInterpreter<T> {
 				return fn.apply(wrapped.onSuccess());
 			}
 		};
+	}
+
+	default T interpret(UnaryOperator<HtmlBuilder.Document<T, ?>> expr) {
+		return expr.apply(document()).documentEnd();
+	}
+
+	default HtmlBuilder.Document<T, ?> document() {
+		return new HtmlBuilderImpl<>(this);
 	}
 }

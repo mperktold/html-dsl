@@ -17,20 +17,21 @@ public class HtmlNodeTest {
 
 	@Test
 	void testNodeBuilder() {
-		List<HtmlNode> nodes = HtmlNode.builder()
-			.html()
-				.head()
-				.headEnd()
-				.body()
-					.div(Map.of("id", "main"))
-						.text("some text")
-						.text("more text")
-						.tag("custom-element")
-						.tagEnd("custom-element")
-					.divEnd()
-				.bodyEnd()
+		List<HtmlNode> nodes = HtmlNode.interpreter()
+			.document()
+				.html()
+					.head()
+					.headEnd()
+					.body()
+						.div(Map.of("id", "main"))
+							.text("some text")
+							.text("more text")
+							.tag("custom-element")
+							.tagEnd("custom-element")
+						.divEnd()
+					.bodyEnd()
 				.htmlEnd()
-			.build();
+			.documentEnd();
 		assertEquals(
 			List.of(html(
 				head(),

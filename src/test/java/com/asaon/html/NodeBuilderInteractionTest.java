@@ -21,15 +21,16 @@ public class NodeBuilderInteractionTest {
 			text("more text"),
 			tag("custom-element")
 		);
-		var htmlString = Html.stringBuilder()
-			.html()
-				.head()
-				.headEnd()
-				.body()
-					.include(subNode)
-				.bodyEnd()
+		var htmlString = Html.intoString()
+			.document()
+				.html()
+					.head()
+					.headEnd()
+					.body()
+						.include(subNode)
+					.bodyEnd()
 				.htmlEnd()
-			.build();
+			.documentEnd();
 		Assertions.assertEquals("""
 			<html>
 				<head>

@@ -29,12 +29,8 @@ public sealed interface HtmlNode {
 
 	<B extends HtmlBuilder<B>> B addTo(HtmlBuilder<B> builder);
 
-	static List<HtmlNode> build(UnaryOperator<HtmlBuilder.Root<List<HtmlNode>, ?>> expr) {
-		return expr.apply(builder()).build();
-	}
-
-	static HtmlBuilder.Root<List<HtmlNode>, ?> builder() {
-		return Html.builder(interpreter());
+	static List<HtmlNode> build(UnaryOperator<HtmlBuilder.Document<List<HtmlNode>, ?>> expr) {
+		return interpreter().interpret(expr);
 	}
 
 	static HtmlInterpreter<List<HtmlNode>> interpreter() {
@@ -42,7 +38,7 @@ public sealed interface HtmlNode {
 	}
 
 	default void appendTo(Appendable writer) {
-		addTo(HtmlBuilder.create(new HtmlAppender<Appendable>(writer)));
+		addTo(new HtmlAppender<>(writer).document());
 	}
 
 	static String toString(HtmlNode node) {

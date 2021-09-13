@@ -8,20 +8,21 @@ public class HtmlBuilderTest {
 	@Test
 	void testAppendToStringBuilder() {
 		var sb = new StringBuilder();
-		HtmlBuilder.create(new HtmlAppender<>(sb))
-			.html()
-				.head()
-				.headEnd()
-				.body()
-					.div(a -> a.id("main"))
-						.text("some text")
-						.text("more text")
-						.tag("custom-element")
-						.tagEnd("custom-element")
-					.divEnd()
-				.bodyEnd()
-			.htmlEnd()
-			.build();
+		Html.appendingTo(sb)
+			.document()
+				.html()
+					.head()
+					.headEnd()
+					.body()
+						.div(a -> a.id("main"))
+							.text("some text")
+							.text("more text")
+							.tag("custom-element")
+							.tagEnd("custom-element")
+						.divEnd()
+					.bodyEnd()
+				.htmlEnd()
+			.documentEnd();
 		Assertions.assertEquals("""
 			<html>
 				<head>
@@ -42,20 +43,21 @@ public class HtmlBuilderTest {
 
 	@Test
 	void testBuilderForString() {
-		var htmlString = Html.stringBuilder()
-			.html()
-				.head()
-				.headEnd()
-				.body()
-					.div(a -> a.id("main"))
-						.text("some text")
-						.text("more text")
-						.tag("custom-element")
-						.tagEnd("custom-element")
-					.divEnd()
-				.bodyEnd()
-			.htmlEnd()
-			.build();
+		var htmlString = Html.intoString()
+			.document()
+				.html()
+					.head()
+					.headEnd()
+					.body()
+						.div(a -> a.id("main"))
+							.text("some text")
+							.text("more text")
+							.tag("custom-element")
+							.tagEnd("custom-element")
+						.divEnd()
+					.bodyEnd()
+				.htmlEnd()
+			.documentEnd();
 		Assertions.assertEquals("""
 			<html>
 				<head>
@@ -76,7 +78,7 @@ public class HtmlBuilderTest {
 
 	@Test
 	void testBuilderViaLambda() {
-		var htmlString = Html.toString(builder -> builder
+		var htmlString = Html.buildString(builder -> builder
 			.html()
 				.head()
 				.headEnd()
@@ -110,15 +112,16 @@ public class HtmlBuilderTest {
 
 	@Test
 	void testSubExpression() {
-		var htmlString = Html.stringBuilder()
-			.html()
-				.head()
-				.headEnd()
-				.body()
-					.include(this::subExpression)
-				.bodyEnd()
+		var htmlString = Html.intoString()
+			.document()
+				.html()
+					.head()
+					.headEnd()
+					.body()
+						.include(this::subExpression)
+					.bodyEnd()
 				.htmlEnd()
-			.build();
+			.documentEnd();
 		Assertions.assertEquals("""
 			<html>
 				<head>
@@ -157,7 +160,7 @@ public class HtmlBuilderTest {
 				</custom-element>
 			</div>
 			""",
-			Html.toString(this::subExpression)
+			Html.buildString(this::subExpression)
 		);
 	}
 }

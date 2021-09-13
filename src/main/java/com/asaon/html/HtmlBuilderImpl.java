@@ -3,7 +3,7 @@ package com.asaon.html;
 import java.util.Map;
 
 record HtmlBuilderImpl<T>(HtmlInterpreter<T> interpreter) implements
-	HtmlBuilder.Root<T, HtmlBuilderImpl<T>>,
+	HtmlBuilder.Document<T, HtmlBuilderImpl<T>>,
 	HtmlBuilder.Html<HtmlBuilderImpl<T>, HtmlBuilderImpl<T>>,
 	HtmlBuilder.Head<HtmlBuilderImpl<T>, HtmlBuilderImpl<T>>,
 	HtmlBuilder.Meta<HtmlBuilderImpl<T>, HtmlBuilderImpl<T>>,
@@ -47,5 +47,5 @@ record HtmlBuilderImpl<T>(HtmlInterpreter<T> interpreter) implements
 	@Override public HtmlBuilderImpl<T> span(Map<String, String> attrs) { return tag("span", attrs); }
 	@Override public HtmlBuilderImpl<T> spanEnd() { return tagEnd("span"); }
 
-	@Override public T build() { return interpreter.onSuccess(); }
+	@Override public T documentEnd() { return interpreter.onSuccess(); }
 }

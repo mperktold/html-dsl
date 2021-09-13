@@ -9,7 +9,6 @@ import com.asaon.html.attr.MetaAttributesBuilder;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
 public interface HtmlBuilder<SELF extends HtmlBuilder<SELF>> {
@@ -54,18 +53,5 @@ public interface HtmlBuilder<SELF extends HtmlBuilder<SELF>> {
 	interface Meta<PARENT, SELF extends Meta<PARENT, SELF>> extends HtmlBuilder<SELF> { PARENT metaEnd(); }
 	interface Div<PARENT, SELF extends Div<PARENT, SELF>> extends HtmlBuilder<SELF> { PARENT divEnd(); }
 	interface Span<PARENT, SELF extends Span<PARENT, SELF>> extends HtmlBuilder<SELF> { PARENT spanEnd(); }
-	interface Root<T, SELF extends Root<T, SELF>> extends HtmlBuilder<SELF> { T build(); }
-
-	static <T> Root<T, ?> create(HtmlInterpreter<T> interpreter) {
-		return new HtmlBuilderImpl<>(interpreter);
-	}
-
-	static <T> T interpret(HtmlInterpreter<T> interpreter, Function<? super Root<T, ?>, ? extends Root<T, ?>> expr) {
-		Root<T, ?> root = create(interpreter);
-		return expr.apply(root).build();
-	}
-
-	static Root<String, ?> forString() {
-		return create(new HtmlAppender<>(new StringBuilder()).map(StringBuilder::toString));
-	}
+	interface Document<T, SELF extends Document<T, SELF>> extends HtmlBuilder<SELF> { T documentEnd(); }
 }
