@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 
-public interface HtmlBuilder<SELF extends HtmlBuilder<SELF>> {
+public interface HtmlDsl<SELF extends HtmlDsl<SELF>> {
 	Tag<SELF, ?> tag(String tag, Map<String, String> attrs);
 	default Tag<SELF, ?> tag(String tag, Consumer<AttributesBuilder<?>> attrs) { return tag(tag, globalAttrs(attrs)); }
 	default Tag<SELF, ?> tag(String tag) { return tag(tag, Map.of()); }
@@ -46,12 +46,12 @@ public interface HtmlBuilder<SELF extends HtmlBuilder<SELF>> {
 
 	SELF text(String content);
 
-	interface Tag<PARENT, SELF extends Tag<PARENT, SELF>> extends HtmlBuilder<SELF> { PARENT tagEnd(String tag); }
-	interface Html<PARENT, SELF extends Html<PARENT, SELF>> extends HtmlBuilder<SELF> { PARENT htmlEnd(); }
-	interface Head<PARENT, SELF extends Head<PARENT, SELF>> extends HtmlBuilder<SELF> { PARENT headEnd(); }
-	interface Body<PARENT, SELF extends Body<PARENT, SELF>> extends HtmlBuilder<SELF> { PARENT bodyEnd(); }
-	interface Meta<PARENT, SELF extends Meta<PARENT, SELF>> extends HtmlBuilder<SELF> { PARENT metaEnd(); }
-	interface Div<PARENT, SELF extends Div<PARENT, SELF>> extends HtmlBuilder<SELF> { PARENT divEnd(); }
-	interface Span<PARENT, SELF extends Span<PARENT, SELF>> extends HtmlBuilder<SELF> { PARENT spanEnd(); }
-	interface Document<T, SELF extends Document<T, SELF>> extends HtmlBuilder<SELF> { T documentEnd(); }
+	interface Tag<PARENT, SELF extends Tag<PARENT, SELF>> extends HtmlDsl<SELF> { PARENT tagEnd(String tag); }
+	interface Html<PARENT, SELF extends Html<PARENT, SELF>> extends HtmlDsl<SELF> { PARENT htmlEnd(); }
+	interface Head<PARENT, SELF extends Head<PARENT, SELF>> extends HtmlDsl<SELF> { PARENT headEnd(); }
+	interface Body<PARENT, SELF extends Body<PARENT, SELF>> extends HtmlDsl<SELF> { PARENT bodyEnd(); }
+	interface Meta<PARENT, SELF extends Meta<PARENT, SELF>> extends HtmlDsl<SELF> { PARENT metaEnd(); }
+	interface Div<PARENT, SELF extends Div<PARENT, SELF>> extends HtmlDsl<SELF> { PARENT divEnd(); }
+	interface Span<PARENT, SELF extends Span<PARENT, SELF>> extends HtmlDsl<SELF> { PARENT spanEnd(); }
+	interface Document<T, SELF extends Document<T, SELF>> extends HtmlDsl<SELF> { T documentEnd(); }
 }

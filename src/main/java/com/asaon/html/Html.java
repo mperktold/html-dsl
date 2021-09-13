@@ -10,7 +10,7 @@ public class Html {
 		return new HtmlAppender<>(sink);
 	}
 
-	public static <W extends Appendable> W appendTo(W writer, UnaryOperator<HtmlBuilder.Document<W, ?>> expr) {
+	public static <W extends Appendable> W appendTo(W writer, UnaryOperator<HtmlDsl.Document<W, ?>> expr) {
 		return new HtmlAppender<>(writer).interpret(expr);
 	}
 
@@ -18,7 +18,7 @@ public class Html {
 		return new HtmlAppender<>(new StringBuilder()).map(StringBuilder::toString);
 	}
 
-	public static String buildString(UnaryOperator<HtmlBuilder.Document<String, ?>> expr) {
+	public static String buildString(UnaryOperator<HtmlDsl.Document<String, ?>> expr) {
 		return intoString().interpret(expr);
 	}
 }

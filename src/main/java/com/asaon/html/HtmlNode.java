@@ -8,7 +8,7 @@ public sealed interface HtmlNode {
 
 	record Text(String content) implements HtmlNode {
 		@Override
-		public <B extends HtmlBuilder<B>> B addTo(HtmlBuilder<B> builder) {
+		public <B extends HtmlDsl<B>> B addTo(HtmlDsl<B> builder) {
 			return builder.text(content);
 		}
 	}
@@ -20,16 +20,16 @@ public sealed interface HtmlNode {
 		}
 
 		@Override
-		public <B extends HtmlBuilder<B>> B addTo(HtmlBuilder<B> builder) {
+		public <B extends HtmlDsl<B>> B addTo(HtmlDsl<B> builder) {
 			var inner = builder.tag(tag, attrs);
 			content.forEach(c -> c.addTo(builder));
 			return inner.tagEnd(tag);
 		}
 	}
 
-	<B extends HtmlBuilder<B>> B addTo(HtmlBuilder<B> builder);
+	<B extends HtmlDsl<B>> B addTo(HtmlDsl<B> builder);
 
-	static List<HtmlNode> build(UnaryOperator<HtmlBuilder.Document<List<HtmlNode>, ?>> expr) {
+	static List<HtmlNode> build(UnaryOperator<HtmlDsl.Document<List<HtmlNode>, ?>> expr) {
 		return interpreter().interpret(expr);
 	}
 

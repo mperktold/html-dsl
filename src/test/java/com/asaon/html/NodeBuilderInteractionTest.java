@@ -75,7 +75,7 @@ public class NodeBuilderInteractionTest {
 		);
 	}
 
-	<B extends HtmlBuilder<B>> B subExpression(HtmlBuilder<B> builder) {
+	<B extends HtmlDsl<B>> B subExpression(HtmlDsl<B> builder) {
 		return builder
 			.div(a -> a.id("main"))
 				.text("some text")

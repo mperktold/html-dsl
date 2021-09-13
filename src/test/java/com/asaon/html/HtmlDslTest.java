@@ -3,7 +3,7 @@ package com.asaon.html;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class HtmlBuilderTest {
+public class HtmlDslTest {
 
 	@Test
 	void testAppendToStringBuilder() {
@@ -140,7 +140,7 @@ public class HtmlBuilderTest {
 		);
 	}
 
-	<B extends HtmlBuilder<B>> B subExpression(HtmlBuilder<B> builder) {
+	<B extends HtmlDsl<B>> B subExpression(HtmlDsl<B> builder) {
 		return builder
 			.div(a -> a.id("main"))
 				.text("some text")

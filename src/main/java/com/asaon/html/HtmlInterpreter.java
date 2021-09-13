@@ -20,11 +20,11 @@ public interface HtmlInterpreter<T> {
 		};
 	}
 
-	default T interpret(UnaryOperator<HtmlBuilder.Document<T, ?>> expr) {
+	default T interpret(UnaryOperator<HtmlDsl.Document<T, ?>> expr) {
 		return expr.apply(document()).documentEnd();
 	}
 
-	default HtmlBuilder.Document<T, ?> document() {
-		return new HtmlBuilderImpl<>(this);
+	default HtmlDsl.Document<T, ?> document() {
+		return new HtmlDslImpl<>(this);
 	}
 }
