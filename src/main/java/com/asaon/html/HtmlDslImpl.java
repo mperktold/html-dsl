@@ -47,5 +47,5 @@ record HtmlDslImpl<T>(HtmlInterpreter<T> interpreter) implements
 	@Override public HtmlDslImpl<T> span(Map<String, String> attrs) { return tag("span", attrs); }
 	@Override public HtmlDslImpl<T> _span() { return _tag("span"); }
 
-	@Override public T _document() { return interpreter.onSuccess(); }
+	@Override public T end() { return interpreter.onSuccess(); }
 }

@@ -22,7 +22,7 @@ public class HtmlDslTest {
 						._div()
 					._body()
 				._html()
-			._document();
+			.end();
 		Assertions.assertEquals("""
 			<html>
 				<head>
@@ -57,7 +57,7 @@ public class HtmlDslTest {
 						._div()
 					._body()
 				._html()
-			._document();
+			.end();
 		Assertions.assertEquals("""
 			<html>
 				<head>
@@ -121,7 +121,7 @@ public class HtmlDslTest {
 						.include(this::subExpression)
 					._body()
 				._html()
-			._document();
+			.end();
 		Assertions.assertEquals("""
 			<html>
 				<head>

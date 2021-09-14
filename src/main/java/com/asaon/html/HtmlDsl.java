@@ -53,5 +53,5 @@ public interface HtmlDsl<SELF extends HtmlDsl<SELF>> {
 	interface Meta<PARENT, SELF extends Meta<PARENT, SELF>> extends HtmlDsl<SELF> { PARENT _meta(); }
 	interface Div<PARENT, SELF extends Div<PARENT, SELF>> extends HtmlDsl<SELF> { PARENT _div(); }
 	interface Span<PARENT, SELF extends Span<PARENT, SELF>> extends HtmlDsl<SELF> { PARENT _span(); }
-	interface Document<T, SELF extends Document<T, SELF>> extends HtmlDsl<SELF> { T _document(); }
+	interface Document<T, SELF extends Document<T, SELF>> extends HtmlDsl<SELF> { T end(); }
 }

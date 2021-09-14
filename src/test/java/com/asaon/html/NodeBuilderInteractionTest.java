@@ -30,7 +30,7 @@ public class NodeBuilderInteractionTest {
 						.include(subNode)
 					._body()
 				._html()
-			._document();
+			.end();
 		Assertions.assertEquals("""
 			<html>
 				<head>

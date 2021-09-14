@@ -31,7 +31,7 @@ public class HtmlNodeTest {
 						._div()
 					._body()
 				._html()
-			._document();
+			.end();
 		assertEquals(
 			List.of(html(
 				head(),
