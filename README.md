@@ -8,38 +8,38 @@ DSL for generating HTML in Java
 This library gives you a fluent DSL for generating HTML like this:
 
 ```java
-String htmlString = Html
-  .stringBuilder()
+String htmlString = Html.intoString()
+  .document()
     .html()
       .body()
         .div(Map.of("id", "sidenav"))
           .text("Sidenav content goes here")
-        .divEnd()
+        ._div()
         .div(Map.of("id", "main"))
           .text("Main content goes here")
-        .divEnd()
-      .bodyEnd()
-    .htmlEnd()
-  .build();
+        ._div()
+      ._body()
+    ._html()
+  ._document();
 ```
 
 ## Main features
 
 ### Typesafety
 
-The DSL helps you to get the HTML structure correct, i.e. not to forget end tags. Every opening tag returns a nested type, and every end tag returns the "parent" type. The type returned by the tag opening method only provides one tag ending method for exactly that tag, and only the outermost type provides the `build()` method which you should invoke to complete the HTML. This means that as long as you have a single chain of method calls that ends with `build()`, all tags are guaranteed to be ended correctly.
+The DSL helps you to get the HTML structure correct, i.e. not to forget end tags. Every opening tag returns a nested type, and every end tag returns the "parent" type. The type returned by the tag opening method only provides one tag ending method for exactly that tag, and only the outermost type provides the `_document()` method which you should invoke to complete the HTML document. This means that as long as you have a single chain of method calls that ends with `_document()`, all tags are guaranteed to be ended correctly.
 
 ```java
-String htmlString = Html
-  .stringBuilder()  // : Root<String, ...>
-    .body()         // : Body<Root<...>>
-      .div()        // : Div<Body<Root<...>>>
-        .text()     // : Div<Body<Root<...>>>
-    //.bodyEnd()    // not possible, since type Div does not provide method bodyEnd(), only Body does
-    //.build()      // not possible, since type Div does not provide method build(), only Root does
-      .divEnd()     // : Body<Root<...>>
-    .bodyEnd()      // : Root<String, ...>
-  .build();         // : String
+String htmlString = Html.intoString()
+  .document()       // : Document<String, ...>
+    .body()         // : Body<Document<...>>
+      .div()        // : Div<Body<Document<...>>>
+        .text()     // : Div<Body<Document<...>>>
+    //._body()      // not possible, since type Div does not provide method _body(), only Body does
+    //._document()  // not possible, since type Div does not provide method _document(), only Document does
+      ._div()       // : Body<Document<...>>
+    ._body()        // : Document<String, ...>
+  ._document();     // : String
 ```
 
 ## Inspiration
