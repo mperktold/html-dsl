@@ -140,7 +140,7 @@ public class HtmlDslTest {
 		);
 	}
 
-	<B extends HtmlDsl<B>> B subExpression(HtmlDsl<B> builder) {
+	<D extends HtmlDsl<D>> D subExpression(HtmlDsl<D> builder) {
 		return builder
 			.div(a -> a.id("main"))
 				.text("some text")
