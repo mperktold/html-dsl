@@ -20,14 +20,14 @@ String htmlString = Html.intoString()
         ._div()
       ._body()
     ._html()
-  ._document();
+  .end();
 ```
 
 ## Main features
 
 ### Typesafety
 
-The DSL helps you to get the HTML structure correct, i.e. not to forget end tags. Every opening tag returns a nested type, and every end tag returns the "parent" type. The type returned by the tag opening method only provides one tag ending method for exactly that tag, and only the outermost type provides the `_document()` method which you should invoke to complete the HTML document. This means that as long as you have a single chain of method calls that ends with `_document()`, all tags are guaranteed to be ended correctly.
+The DSL helps you to get the HTML structure correct, i.e. not to forget end tags. Every opening tag returns a nested type, and every end tag returns the "parent" type. The type returned by the tag opening method only provides one tag ending method for exactly that tag, and only the outermost type provides the `end()` method which you should invoke to complete the HTML document. This means that as long as you have a single chain of method calls that ends with `end()`, all tags are guaranteed to be ended correctly.
 
 ```java
 String htmlString = Html.intoString()
@@ -39,7 +39,7 @@ String htmlString = Html.intoString()
     //._document()  // not possible, since type Div does not provide method _document(), only Document does
       ._div()       // : Body<Document<...>>
     ._body()        // : Document<String, ...>
-  ._document();     // : String
+  .end();           // : String
 ```
 
 ## Inspiration
