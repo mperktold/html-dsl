@@ -163,4 +163,49 @@ public class HtmlDslTest {
 			Html.buildString(this::subExpression)
 		);
 	}
+
+	@Test
+	void testUnbalancedSubExpression() {
+		var htmlString = Html.intoString()
+			.document()
+				.html()
+					.head()
+					._head()
+					.body()
+						.include(this::openSubExpression)
+							.text("some text")
+							.text("more text")
+							.tag("custom-element")
+							._tag("custom-element")
+						.include(this::closeSubExpression)
+					._body()
+				._html()
+			.end();
+		Assertions.assertEquals("""
+			<html>
+				<head>
+				</head>
+				<body>
+					<div id="main">
+						some text
+						more text
+						<custom-element>
+						</custom-element>
+					</div>
+				</body>
+			</html>
+			""",
+			htmlString
+		);
+	}
+
+	<D extends HtmlDsl<D>> HtmlDsl.Div<D, ?> openSubExpression(HtmlDsl<D> builder) {
+		return builder
+			.div(a -> a.id("main"));
+	}
+
+	<D extends HtmlDsl<D>> D closeSubExpression(HtmlDsl.Div<D, ?> builder) {
+		return builder
+			._div();
+	}
 }

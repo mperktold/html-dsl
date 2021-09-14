@@ -9,7 +9,7 @@ import com.asaon.html.attr.MetaAttributesBuilder;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.function.Consumer;
-import java.util.function.UnaryOperator;
+import java.util.function.Function;
 
 public interface HtmlDsl<SELF extends HtmlDsl<SELF>> {
 	Tag<SELF, ?> tag(String tag, Map<String, String> attrs);
@@ -39,7 +39,7 @@ public interface HtmlDsl<SELF extends HtmlDsl<SELF>> {
 		return self;
 	}
 
-	default SELF include(UnaryOperator<SELF> subExpr) {
+	default <R> R include(Function<? super SELF, ? extends R> subExpr) {
 		@SuppressWarnings("unchecked") SELF self = (SELF)this;
 		return subExpr.apply(self);
 	}
