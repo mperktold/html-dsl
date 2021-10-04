@@ -8,8 +8,6 @@ import static com.asaon.html.HtmlNodes.tag;
 import static com.asaon.html.HtmlNodes.text;
 import static com.asaon.html.attr.Attributes.id;
 
-import java.util.List;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -17,7 +15,7 @@ public class NodeBuilderInteractionTest {
 
 	@Test
 	void testIncludeNodes() {
-		var subNode = div(List.of(id("main")),
+		var subNode = div( id("main") ).content(
 			text("some text"),
 			text("more text"),
 			tag("custom-element")
@@ -52,9 +50,9 @@ public class NodeBuilderInteractionTest {
 
 	@Test
 	void testNodesWithSubBuilder() {
-		var html = html(
+		var html = html().content(
 			head(),
-			body(
+			body().content(
 				HtmlNode.build(this::subExpression)
 			)
 		);

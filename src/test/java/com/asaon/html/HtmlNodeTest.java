@@ -33,10 +33,10 @@ public class HtmlNodeTest {
 				._html()
 			.end();
 		assertEquals(
-			List.of(html(
+			List.of(html().content(
 				head(),
-				body(
-					div(List.of(id("main")),
+				body().content(
+					div( id("main") ).content(
 						text("some text"),
 						text("more text"),
 						tag("custom-element")
@@ -64,10 +64,10 @@ public class HtmlNodeTest {
 			</html>
 			""",
 			HtmlNode.toString(
-				html(
+				html().content(
 					head(),
-					body(
-						div(List.of(id("main")),
+					body().content(
+						div( id("main") ).content(
 							text("some text"),
 							text("more text"),
 							tag("custom-element")

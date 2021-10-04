@@ -18,6 +18,18 @@ public sealed interface HtmlNode {
 			content = List.copyOf(content);
 		}
 
+		public Element content(List<? extends HtmlNode> content) {
+			return new Element(tag, attrs, content);
+		}
+
+		public Element content(HtmlNode... content) {
+			return content(List.of(content));
+		}
+
+		public Element content(String content) {
+			return content(List.of(new Text(content)));
+		}
+
 		@Override
 		public <D extends HtmlDsl<D>> D addTo(HtmlDsl<D> builder) {
 			var inner = builder.tag(tag, attrs.toArray(Attribute[]::new));
