@@ -1,5 +1,8 @@
 package com.asaon.html;
 
+import com.asaon.html.dsl.Document;
+import com.asaon.html.dsl.HtmlDsl;
+
 import java.util.List;
 import java.util.function.UnaryOperator;
 
@@ -40,7 +43,7 @@ public sealed interface HtmlNode {
 
 	<D extends HtmlDsl<D>> D addTo(HtmlDsl<D> builder);
 
-	static List<HtmlNode> build(UnaryOperator<HtmlDsl.Document<List<HtmlNode>, ?>> expr) {
+	static List<HtmlNode> build(UnaryOperator<Document<List<HtmlNode>>> expr) {
 		return interpreter().interpret(expr);
 	}
 

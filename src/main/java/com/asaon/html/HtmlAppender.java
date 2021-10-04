@@ -1,6 +1,7 @@
 package com.asaon.html;
 
 import java.io.IOException;
+import java.util.List;
 
 public class HtmlAppender<W extends Appendable> implements HtmlInterpreter<W> {
 
@@ -23,7 +24,7 @@ public class HtmlAppender<W extends Appendable> implements HtmlInterpreter<W> {
 	}
 
 	@Override
-	public void onTagStart(String name, Attribute[] attrs, boolean empty) {
+	public void onTagStart(String name, List<Attribute> attrs, boolean empty) {
 		try {
 			indent();
 			writer.append('<').append(name);

@@ -1,10 +1,13 @@
 package com.asaon.html;
 
+import com.asaon.html.dsl.Document;
+
+import java.util.List;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
 public interface HtmlInterpreter<T> {
-	void onTagStart(String name, Attribute[] attrs, boolean empty);
+	void onTagStart(String name, List<Attribute> attrs, boolean empty);
 	void onContent(String content);
 	void onTagEnd(String name);
 
@@ -19,11 +22,11 @@ public interface HtmlInterpreter<T> {
 		};
 	}
 
-	default T interpret(UnaryOperator<HtmlDsl.Document<T, ?>> expr) {
+	default T interpret(UnaryOperator<Document<T>> expr) {
 		return expr.apply(document()).end();
 	}
 
-	default HtmlDsl.Document<T, ?> document() {
-		return new HtmlDslImpl<>(this);
+	default Document<T> document() {
+		return new Document<>(this);
 	}
 }

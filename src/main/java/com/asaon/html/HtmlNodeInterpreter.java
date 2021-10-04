@@ -9,8 +9,13 @@ import java.util.List;
 
 public class HtmlNodeInterpreter implements HtmlInterpreter<List<HtmlNode>> {
 
-	private record MutableElement(String tag, Attribute[] attrs, ArrayList<HtmlNode> content) {
-		MutableElement(String tag, Attribute[] attrs) {
+	private record MutableElement(String tag, List<Attribute> attrs, ArrayList<HtmlNode> content) {
+
+		MutableElement {
+			attrs = List.copyOf(attrs);
+		}
+
+		MutableElement(String tag, List<Attribute> attrs) {
 			this(tag, attrs, new ArrayList<>());
 		}
 	}
@@ -19,7 +24,7 @@ public class HtmlNodeInterpreter implements HtmlInterpreter<List<HtmlNode>> {
 	private final ArrayList<HtmlNode> rootNodes = new ArrayList<>();
 
 	@Override
-	public void onTagStart(String name, Attribute[] attrs, boolean empty) {
+	public void onTagStart(String name, List<Attribute> attrs, boolean empty) {
 		stack.push(new MutableElement(name, attrs));
 	}
 
@@ -31,7 +36,7 @@ public class HtmlNodeInterpreter implements HtmlInterpreter<List<HtmlNode>> {
 	@Override
 	public void onTagEnd(String name) {
 		MutableElement elem = stack.pop();
-		onNodeEnd(new Element(elem.tag, List.of(elem.attrs), elem.content));
+		onNodeEnd(new Element(elem.tag, elem.attrs, elem.content));
 	}
 
 	private void onNodeEnd(HtmlNode node) {

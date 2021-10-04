@@ -1,5 +1,7 @@
 package com.asaon.html;
 
+import com.asaon.html.dsl.Document;
+
 import java.util.function.UnaryOperator;
 
 public class Html {
@@ -10,7 +12,7 @@ public class Html {
 		return new HtmlAppender<>(sink);
 	}
 
-	public static <W extends Appendable> W appendTo(W writer, UnaryOperator<HtmlDsl.Document<W, ?>> expr) {
+	public static <W extends Appendable> W appendTo(W writer, UnaryOperator<Document<W>> expr) {
 		return new HtmlAppender<>(writer).interpret(expr);
 	}
 
@@ -18,7 +20,7 @@ public class Html {
 		return new HtmlAppender<>(new StringBuilder()).map(StringBuilder::toString);
 	}
 
-	public static String buildString(UnaryOperator<HtmlDsl.Document<String, ?>> expr) {
+	public static String buildString(UnaryOperator<Document<String>> expr) {
 		return intoString().interpret(expr);
 	}
 }

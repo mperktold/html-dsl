@@ -8,6 +8,8 @@ import static com.asaon.html.HtmlNodes.tag;
 import static com.asaon.html.HtmlNodes.text;
 import static com.asaon.html.attr.Attributes.id;
 
+import com.asaon.html.dsl.HtmlDsl;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -74,8 +76,8 @@ public class NodeBuilderInteractionTest {
 		);
 	}
 
-	<D extends HtmlDsl<D>> D subExpression(HtmlDsl<D> builder) {
-		return builder
+	<D extends HtmlDsl<D>> D subExpression(D dsl) {
+		return dsl
 			.div( id("main") )
 				.text("some text")
 				.text("more text")

@@ -2,6 +2,9 @@ package com.asaon.html;
 
 import static com.asaon.html.attr.Attributes.id;
 
+import com.asaon.html.dsl.Div;
+import com.asaon.html.dsl.HtmlDsl;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -142,7 +145,7 @@ public class HtmlDslTest {
 		);
 	}
 
-	<D extends HtmlDsl<D>> D subExpression(HtmlDsl<D> builder) {
+	<D extends HtmlDsl<D>> D subExpression(D builder) {
 		return builder
 			.div( id("main") )
 				.text("some text")
@@ -201,13 +204,13 @@ public class HtmlDslTest {
 		);
 	}
 
-	<D extends HtmlDsl<D>> HtmlDsl.Div<D, ?> openSubExpression(HtmlDsl<D> builder) {
-		return builder
+	<D extends HtmlDsl<D>> Div<D> openSubExpression(D dsl) {
+		return dsl
 			.div( id("main") );
 	}
 
-	<D extends HtmlDsl<D>> D closeSubExpression(HtmlDsl.Div<D, ?> builder) {
-		return builder
+	<D extends HtmlDsl<D>> D closeSubExpression(Div<D> dsl) {
+		return dsl
 			._div();
 	}
 }
