@@ -1,5 +1,7 @@
 package com.asaon.html;
 
+import static com.asaon.html.attr.Attributes.id;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +16,7 @@ public class HtmlDslTest {
 					.head()
 					._head()
 					.body()
-						.div(a -> a.id("main"))
+						.div( id("main") )
 							.text("some text")
 							.text("more text")
 							.tag("custom-element")
@@ -49,7 +51,7 @@ public class HtmlDslTest {
 					.head()
 					._head()
 					.body()
-						.div(a -> a.id("main"))
+						.div( id("main") )
 							.text("some text")
 							.text("more text")
 							.tag("custom-element")
@@ -83,7 +85,7 @@ public class HtmlDslTest {
 				.head()
 				._head()
 				.body()
-					.div(a -> a.id("main"))
+					.div( id("main") )
 						.text("some text")
 						.text("more text")
 						.tag("custom-element")
@@ -142,7 +144,7 @@ public class HtmlDslTest {
 
 	<D extends HtmlDsl<D>> D subExpression(HtmlDsl<D> builder) {
 		return builder
-			.div(a -> a.id("main"))
+			.div( id("main") )
 				.text("some text")
 				.text("more text")
 				.tag("custom-element")
@@ -201,7 +203,7 @@ public class HtmlDslTest {
 
 	<D extends HtmlDsl<D>> HtmlDsl.Div<D, ?> openSubExpression(HtmlDsl<D> builder) {
 		return builder
-			.div(a -> a.id("main"));
+			.div( id("main") );
 	}
 
 	<D extends HtmlDsl<D>> D closeSubExpression(HtmlDsl.Div<D, ?> builder) {

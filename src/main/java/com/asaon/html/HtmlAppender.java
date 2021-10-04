@@ -1,7 +1,6 @@
 package com.asaon.html;
 
 import java.io.IOException;
-import java.util.Map;
 
 public class HtmlAppender<W extends Appendable> implements HtmlInterpreter<W> {
 
@@ -24,14 +23,14 @@ public class HtmlAppender<W extends Appendable> implements HtmlInterpreter<W> {
 	}
 
 	@Override
-	public void onTagStart(String name, Map<String, String> attrs, boolean empty) {
+	public void onTagStart(String name, Attribute[] attrs, boolean empty) {
 		try {
 			indent();
 			writer.append('<').append(name);
-			for (var attr : attrs.entrySet()) {
-				writer.append(' ').append(attr.getKey());
-				if (attr.getValue() != null)
-					writer.append('=').append('"').append(attr.getValue()).append('\"');
+			for (var attr : attrs) {
+				writer.append(' ').append(attr.name());
+				if (attr.value() != null)
+					writer.append('=').append('"').append(attr.value()).append('\"');
 			}
 			if (empty)
 				writer.append('/');

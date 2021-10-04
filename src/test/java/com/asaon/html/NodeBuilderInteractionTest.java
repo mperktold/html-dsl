@@ -6,8 +6,9 @@ import static com.asaon.html.HtmlNodes.head;
 import static com.asaon.html.HtmlNodes.html;
 import static com.asaon.html.HtmlNodes.tag;
 import static com.asaon.html.HtmlNodes.text;
+import static com.asaon.html.attr.Attributes.id;
 
-import java.util.Map;
+import java.util.List;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -16,7 +17,7 @@ public class NodeBuilderInteractionTest {
 
 	@Test
 	void testIncludeNodes() {
-		var subNode = div(Map.of("id", "main"),
+		var subNode = div(List.of(id("main")),
 			text("some text"),
 			text("more text"),
 			tag("custom-element")
@@ -77,7 +78,7 @@ public class NodeBuilderInteractionTest {
 
 	<D extends HtmlDsl<D>> D subExpression(HtmlDsl<D> builder) {
 		return builder
-			.div(a -> a.id("main"))
+			.div( id("main") )
 				.text("some text")
 				.text("more text")
 				.tag("custom-element")

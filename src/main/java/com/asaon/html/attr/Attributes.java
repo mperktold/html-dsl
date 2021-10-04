@@ -1,51 +1,58 @@
 package com.asaon.html.attr;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.function.Consumer;
+import com.asaon.html.Attribute;
 
 public class Attributes {
 
 	private Attributes() {}
 
-	public static Map<String, String> globalAttrs(Consumer<AttributesBuilder<?>> consumer) {
-		return buildAttrs(consumer);
+	public static Attribute attr(String name, String value) {
+		return new Attribute(name, value);
 	}
 
-	public static Map<String, String> metaAttrs(Consumer<MetaAttributesBuilder<?>> consumer) {
-		return buildAttrs(consumer);
+	public static Attribute attr(String name) {
+		return new Attribute(name, name);
 	}
 
-	public static Map<String, String> inputAttrs(Consumer<InputAttributesBuilder<?>> consumer) {
-		return buildAttrs(consumer);
-	}
+	/**	Specifies a shortcut key to activate/focus an element. */
+	public static Attribute accesskey(String value) { return attr("accesskey", value); }
 
-	private static Map<String, String> buildAttrs(Consumer<? super BuilderImpl> consumer) {
-		var builder = new BuilderImpl();
-		consumer.accept(builder);
-		return builder.build();
-	}
+	/**	Specifies one or more classnames for an element (refers to a class in a style sheet). */
+	public static Attribute classes(String value) { return attr("class", value); }
 
-	private static class BuilderImpl implements
-		MetaAttributesBuilder<BuilderImpl>,
-		InputAttributesBuilder<BuilderImpl>
-	{
-		private final LinkedHashMap<String, String> attrs = new LinkedHashMap<>();
+	/** Specifies whether the content of an element is editable or not. */
+	public static Attribute contenteditable() { return attr("contenteditable"); }
 
-		@Override
-		public BuilderImpl set(String name, String value) {
-			attrs.put(name, value);
-			return this;
-		}
+	/**	Used to store custom data private to the page or application. */
+	public static Attribute data(String name, String value) { return attr("data-" + name, value); }
 
-		@Override
-		public BuilderImpl name(String value) {
-			return MetaAttributesBuilder.super.name(value);
-		}
+	/** Specifies the text direction for the content in an element. */
+	public static Attribute dir(String value) { return attr("dir", value); }
 
-		@Override
-		public Map<String, String> build() {
-			return Map.copyOf(attrs);
-		}
-	}
+	/**	Specifies whether an element is draggable or not. */
+	public static Attribute draggable() { return attr("draggable"); }
+
+	/** Specifies that an element is not yet, or is no longer, relevant. */
+	public static Attribute hidden() { return attr("hidden"); }
+
+	/** Specifies a unique id for an element. */
+	public static Attribute id(String value) { return attr("id", value); }
+
+	/** Specifies the language of the element's content. */
+	public static Attribute lang(String value) { return attr("lang", value); }
+
+	/** Specifies whether the element is to have its spelling and grammar checked or not. */
+	public static Attribute spellcheck() { return attr("spellcheck"); }
+
+	/** Specifies an inline CSS style for an element. */
+	public static Attribute style(String value) { return attr("style", value); }
+
+	/** Specifies the tabbing order of an element. */
+	public static Attribute tabindex(int index) { return attr("tabindex", Integer.toString(index)); }
+
+	/** Specifies extra information about an element. */
+	public static Attribute title(String value) { return attr("title", value); }
+
+	/** Specifies whether the content of an element should be translated or not. */
+	public static Attribute translate() { return attr("translate"); }
 }

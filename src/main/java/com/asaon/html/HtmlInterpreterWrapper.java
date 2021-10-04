@@ -1,7 +1,5 @@
 package com.asaon.html;
 
-import java.util.Map;
-
 public abstract class HtmlInterpreterWrapper<T, U> implements HtmlInterpreter<T> {
 
 	protected final HtmlInterpreter<U> wrapped;
@@ -11,7 +9,7 @@ public abstract class HtmlInterpreterWrapper<T, U> implements HtmlInterpreter<T>
 	}
 
 	@Override
-	public void onTagStart(String name, Map<String, String> attrs, boolean empty) {
+	public void onTagStart(String name, Attribute[] attrs, boolean empty) {
 		wrapped.onTagStart(name, attrs, empty);
 	}
 

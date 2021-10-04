@@ -1,11 +1,10 @@
 package com.asaon.html;
 
-import java.util.Map;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
 public interface HtmlInterpreter<T> {
-	void onTagStart(String name, Map<String, String> attrs, boolean empty);
+	void onTagStart(String name, Attribute[] attrs, boolean empty);
 	void onContent(String content);
 	void onTagEnd(String name);
 

@@ -1,7 +1,6 @@
 package com.asaon.html;
 
 import java.util.List;
-import java.util.Map;
 import java.util.function.UnaryOperator;
 
 public sealed interface HtmlNode {
@@ -13,15 +12,15 @@ public sealed interface HtmlNode {
 		}
 	}
 
-	record Element(String tag, Map<String, String> attrs, List<? extends HtmlNode> content) implements HtmlNode {
+	record Element(String tag, List<Attribute> attrs, List<? extends HtmlNode> content) implements HtmlNode {
 		public Element {
-			attrs = Map.copyOf(attrs);
+			attrs = List.copyOf(attrs);
 			content = List.copyOf(content);
 		}
 
 		@Override
 		public <D extends HtmlDsl<D>> D addTo(HtmlDsl<D> builder) {
-			var inner = builder.tag(tag, attrs);
+			var inner = builder.tag(tag, attrs.toArray(Attribute[]::new));
 			content.forEach(c -> c.addTo(builder));
 			return inner._tag(tag);
 		}
