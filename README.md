@@ -12,7 +12,7 @@ String htmlString = Html.intoString()
   .document()
     .html()
       .body()
-        .div(Map.of("id", "sidenav"))
+        .div( id(sidenav) )
           .text("Sidenav content goes here")
         ._div()
         .div(Map.of("id", "main"))
@@ -54,12 +54,12 @@ The DSL offers an `include()` method which accepts a function defining some inne
 
 ```java
 
-<D extends HtmlDsl<D>> D bodyContent(HtmlDsl<D> dsl) {
+<D extends HtmlDsl<D>> D bodyContent(D dsl) {
   return dsl
-    .div(Map.of("id", "sidenav"))
+    .div( id("sidenav") )
       .text("Sidenav content goes here")
     ._div()
-    .div(Map.of("id", "main"))
+    .div( id("main") )
       .text("Main content goes here")
     ._div();
 }
@@ -71,8 +71,6 @@ Html.intoString()
     ._body()
   .end()
 ```
-
-Due to some generic quirks, `bodyContent` must declare the parameter as `HtmlDsl<D>` and not just `D`.
 
 ### Typesafe
 
@@ -93,37 +91,24 @@ String htmlString = Html.intoString()
 
 ### Efficient
 
-One big design driver of the API was to make it memory efficient. When streaming a HTML to the network through the DSL, there is no need to create an object per element. It achieves this by implementing the [Step Builder Pattern](https://java-design-patterns.com/patterns/step-builder/): The DSL only forwards the instructions to the interpreter and returns itself. The nested types which ensure correct structure do not reflect the actual return value, it's always the same instance.
+One big design driver of the API was to make it memory efficient. When streaming a HTML to the network through the DSL, there is no need to keep all the HTML structure in memory. The API does create an object per element, but as soon as the tag is closed via `_tag` and the like, the object is not referenced anymore and can be garbage collected. This should allow to create huge HTML documents without out-of-memory problems.
 
 ### In-memory API included
 
 Although the main purpose of this library is to offer A DSL for writing HTML to the network, it also comes with an in-memory representation of HTML nodes. This API is fully interoperable with the DSL, meaning you can use the DSL to build the in-memory representation, and also pipe in-memory through the DSL using `include`. Additionally, there are factory methods to construct the in-memory nodes directly, without going over the generic DSL:
 
 ```java
-var node = html(
+var node = html().content(
   head(),
-  body(
-    div(Map.of("id", "main"),
+  body().content(
+    div( id("main") ).content(
       text("Main content goes here")
     )
   )
 );
 ```
 
-You may prefer this API over the generic DSL for small HTML fragments. However, keep in mind that this is less efficient, especially for large HTML documents, because the whole HTML is built in memory.
-
-### Experimental: Attribute Builder Lambdas
-
-There is an experimental alternative style of defining element attributes by providing a lambda that receives an attribute builder. There are taylered attribute builder types for several elements, depending on which attribute a certain element supports.
-
-```java
-Html.intoString()
-  .document()
-    .div(a -> a.id("main")                    // every element supports "id"
-      .input(a -> a.type("text").required())  // NOT every element supports "type" and "required", input does
-    ._div()
-  .end();
-```
+You may prefer this API over the generic DSL for small HTML fragments. However, it builds the whole HTML tree in memory, which could be a problem for large HTML documents.
 
 ## Inspiration
 
