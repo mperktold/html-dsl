@@ -95,7 +95,7 @@ One big design driver of the API was to make it memory efficient. When streaming
 
 ### In-memory API included
 
-Although the main purpose of this library is to offer A DSL for writing HTML to the network, it also comes with an in-memory representation of HTML nodes. This API is fully interoperable with the DSL, meaning you can use the DSL to build the in-memory representation, and also pipe in-memory through the DSL using `include`. Additionally, there are factory methods to construct the in-memory nodes directly, without going over the generic DSL:
+Although the main purpose of this library is to offer A DSL for writing HTML to the network, it also comes with an in-memory immutable representation of HTML nodes, including factory methods for constructing them:
 
 ```java
 var node = html().content(
@@ -109,6 +109,32 @@ var node = html().content(
 ```
 
 You may prefer this API over the generic DSL for small HTML fragments. However, it builds the whole HTML tree in memory, which could be a problem for large HTML documents.
+
+The in-memory API is fully interoperable with the DSL.
+
+Meaning, you can use the DSL to build the in-memory representation:
+
+```java
+List<HtmlNode> nodes = HtmlNode.interpreter()
+  .document()
+    .div( id("one") ).text("Div one")._div()
+    .div( id("two") ).text("Div two")._div()
+  .end();
+```
+
+Plus, you can pipe nodes through the DSL using `include` overloads for varargs, `Iterable` and `Stream` of nodes:
+
+```
+Html.intoString()
+  .document()
+    .body()
+      .include(
+        div( id("one") ).content("Div one"),
+        div( id("two") ).content("Div two")
+      )
+    ._body()
+  .end();
+```
 
 ## Inspiration
 
