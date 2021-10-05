@@ -7,6 +7,7 @@ import com.asaon.html.HtmlNode;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 public class HtmlDsl<SELF extends HtmlDsl<SELF>> {
 
@@ -48,6 +49,7 @@ public class HtmlDsl<SELF extends HtmlDsl<SELF>> {
 		interpreter.onTagStart("div", List.of(attrs), false);
 		return new Div<>(interpreter, self());
 	}
+
 	public Span<SELF> span(Attribute... attrs) {
 		interpreter.onTagStart("span", List.of(attrs), false);
 		return new Span<>(interpreter, self());
@@ -56,15 +58,17 @@ public class HtmlDsl<SELF extends HtmlDsl<SELF>> {
 	public SELF include(HtmlNode... nodes) {
 		return include(Arrays.asList(nodes));
 	}
-	public SELF include(Iterable<HtmlNode> nodes) {
-		@SuppressWarnings("unchecked") SELF self = (SELF)this;
-		for (HtmlNode n : nodes) n.addTo(self);
-		return self;
+	public SELF include(Iterable<? extends HtmlNode> nodes) {
+		for (HtmlNode n : nodes) n.addTo(this);
+		return self();
+	}
+	public SELF include(Stream<? extends HtmlNode> nodes) {
+		nodes.forEach(n -> n.addTo(this));
+		return self();
 	}
 
 	public <R> R include(Function<? super SELF, ? extends R> subExpr) {
-		@SuppressWarnings("unchecked") SELF self = (SELF)this;
-		return subExpr.apply(self);
+		return subExpr.apply(self());
 	}
 
 	public SELF text(String content) {

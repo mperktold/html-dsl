@@ -1,11 +1,14 @@
 package com.asaon.html;
 
+import static com.asaon.html.HtmlNodes.div;
 import static com.asaon.html.attr.Attributes.id;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.asaon.html.dsl.Div;
 import com.asaon.html.dsl.HtmlDsl;
 
-import org.junit.jupiter.api.Assertions;
+import java.util.stream.Stream;
+
 import org.junit.jupiter.api.Test;
 
 public class HtmlDslTest {
@@ -28,7 +31,7 @@ public class HtmlDslTest {
 					._body()
 				._html()
 			.end();
-		Assertions.assertEquals("""
+		assertEquals("""
 			<html>
 				<head>
 				</head>
@@ -63,7 +66,7 @@ public class HtmlDslTest {
 					._body()
 				._html()
 			.end();
-		Assertions.assertEquals("""
+		assertEquals("""
 			<html>
 				<head>
 				</head>
@@ -97,7 +100,7 @@ public class HtmlDslTest {
 				._body()
 			._html()
 		);
-		Assertions.assertEquals("""
+		assertEquals("""
 			<html>
 				<head>
 				</head>
@@ -127,7 +130,7 @@ public class HtmlDslTest {
 					._body()
 				._html()
 			.end();
-		Assertions.assertEquals("""
+		assertEquals("""
 			<html>
 				<head>
 				</head>
@@ -157,7 +160,7 @@ public class HtmlDslTest {
 
 	@Test
 	void testSubExpressionAsRoot() {
-		Assertions.assertEquals("""
+		assertEquals("""
 			<div id="main">
 				some text
 				more text
@@ -186,7 +189,7 @@ public class HtmlDslTest {
 					._body()
 				._html()
 			.end();
-		Assertions.assertEquals("""
+		assertEquals("""
 			<html>
 				<head>
 				</head>
@@ -212,5 +215,78 @@ public class HtmlDslTest {
 	<D extends HtmlDsl<D>> D closeSubExpression(Div<D> dsl) {
 		return dsl
 			._div();
+	}
+
+	@Test
+	void testIncludeNodeStream() {
+		var htmlString = Html.intoString()
+			.document()
+				.html()
+					.head()
+					._head()
+					.body()
+						.include(Stream.of("one", "two", "three")
+							.map(s -> div( id(s) ).content(s))
+						)
+					._body()
+				._html()
+			.end();
+		assertEquals("""
+			<html>
+				<head>
+				</head>
+				<body>
+					<div id="one">
+						one
+					</div>
+					<div id="two">
+						two
+					</div>
+					<div id="three">
+						three
+					</div>
+				</body>
+			</html>
+			""",
+			htmlString
+		);
+	}
+
+	@Test
+	void testIncludeLoop() {
+		var htmlString = Html.intoString()
+			.document()
+				.html()
+					.head()
+					._head()
+					.body()
+						.include(dsl -> {
+							String[] strings = { "one", "two", "three" };
+							for (String s : strings)
+								dsl = dsl.div( id(s) ).text(s)._div();
+							return dsl;
+						})
+					._body()
+				._html()
+			.end();
+		assertEquals("""
+			<html>
+				<head>
+				</head>
+				<body>
+					<div id="one">
+						one
+					</div>
+					<div id="two">
+						two
+					</div>
+					<div id="three">
+						three
+					</div>
+				</body>
+			</html>
+			""",
+			htmlString
+		);
 	}
 }
